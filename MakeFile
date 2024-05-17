@@ -1,0 +1,8 @@
+build:
+	@go build -o bin/personal-blog cmd/personal-blog/main.go
+
+test:
+	@go test -v ./...
+
+run: build
+	@./bin/personal-blog
