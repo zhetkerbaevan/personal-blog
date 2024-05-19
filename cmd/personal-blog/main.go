@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/zhetkerbaevan/personal-blog/cmd/api"
 	"github.com/zhetkerbaevan/personal-blog/internal/config"
 	"github.com/zhetkerbaevan/personal-blog/internal/db"
 )
@@ -19,5 +20,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("connected to db", db)
+	fmt.Println("Connected to db")
+	
+	//start server
+	server := api.NewAPIServer(db, ":8080")
+	if err := server.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
