@@ -17,6 +17,11 @@ type RegisterUser struct {
 	Age      int    `json:"age" validate:"required"`
 }
 
+type LoginUser struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
+
 type UserStore interface {
 	CreateUser(User) error
 	GetUserByEmail(string) (*User, error)

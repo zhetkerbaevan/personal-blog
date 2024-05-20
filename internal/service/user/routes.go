@@ -7,6 +7,7 @@ import (
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
 	"github.com/zhetkerbaevan/personal-blog/internal/auth"
+	"github.com/zhetkerbaevan/personal-blog/internal/config"
 	"github.com/zhetkerbaevan/personal-blog/internal/models"
 	"github.com/zhetkerbaevan/personal-blog/internal/utils"
 )
@@ -42,7 +43,7 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 	//check if user with email exists
 	_, err := h.userStore.GetUserByEmail(payload.Email)
 	if err == nil {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("INVALID EMAIL"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("USER ALREADY EXISTS"))
 		return 
 	}
 
@@ -71,5 +72,39 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
+	var payload models.LoginUser
+	//extract data from request
+	if err := utils.ParseJSON(r, &payload); err != nil {
+		utils.WriteError(w, http.StatusBadRequest, err)
+	}
+
+	//validate data
+	if err := utils.Validator.Struct(payload); err != nil {
+		errors := err.(validator.ValidationErrors)
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("INVALID PAYLOAD %v", errors))
+		return
+	}
+
+	//get user by email
+	u, err := h.userStore.GetUserByEmail(payload.Email)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("INVALID EMAIL OR PASSWORD"))
+		return
+	}
+
+	//compare password with hashed
+	if auth.ComparePassword(u.Password, []byte(payload.Password)) {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("INVALID EMAIL OR PASSWORD"))
+		return
+	}
+
+	//create token
+	secret := []byte(config.Envs.JWTSecret)
+	token, err := auth.CreateJWT(secret, u.Id)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+	}
 	
+	//return token
+	utils.WriteJSON(w, http.StatusOK, map[string]string{"token" : token})
 }
