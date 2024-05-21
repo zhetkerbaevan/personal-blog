@@ -13,7 +13,7 @@ go mod tidy
 ```
 3. Database Configuration  
 * Set up PostgreSQL database.  
-* Configure connection details in internal/config/config.go  
+* Configure connection details in internal/config/env.go  
 4. Run Migrations
  ```sh
 make migrate-up
