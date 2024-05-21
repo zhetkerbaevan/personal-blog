@@ -11,9 +11,9 @@ cd personal_blog
  ```sh
 go mod tidy
 ```
-3. Database Configuration
-Set up PostgreSQL database.  
-Configure connection details in internal/config/config.go  
+3. Database Configuration  
+* Set up PostgreSQL database.  
+* Configure connection details in internal/config/config.go  
 4. Run Migrations
  ```sh
 make migrate-up
