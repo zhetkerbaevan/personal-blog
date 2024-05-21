@@ -23,11 +23,11 @@ make migrate-up
 make run
 ```
 ## API Endpoints
-POST /api/v1/register - Register a new user.
-POST /api/v1/login - Obtain a JWT token for authentication.
-GET /api/v1/posts - Retrieve all blog posts.
-GET /api/v1/posts/{id} - Retrieve a specific post by ID.
-POST /api/v1/posts - Create a new blog post.
-PUT /api/v1/posts/{id} - Update an existing blog post.
-DELETE /api/v1/posts/{id} - Delete a blog post.
+POST /api/v1/register - Register a new user.  
+POST /api/v1/login - Obtain a JWT token for authentication.  
+GET /api/v1/posts - Retrieve all blog posts.  
+GET /api/v1/posts/{id} - Retrieve a specific post by ID.  
+POST /api/v1/posts - Create a new blog post.  
+PUT /api/v1/posts/{id} - Update an existing blog post.  
+DELETE /api/v1/posts/{id} - Delete a blog post.  
    
