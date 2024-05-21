@@ -22,7 +22,8 @@ type LoginUser struct {
 	Password string `json:"password" validate:"required"`
 }
 
-type UserStore interface {
+type UserStoreInterface interface {
 	CreateUser(User) error
 	GetUserByEmail(string) (*User, error)
+	GetUserByID(int) (*User, error)
 }

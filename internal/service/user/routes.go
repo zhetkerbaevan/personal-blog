@@ -13,10 +13,10 @@ import (
 )
 
 type Handler struct {
-	userStore models.UserStore
+	userStore models.UserStoreInterface
 }
 
-func NewHandler(userStore models.UserStore) *Handler {
+func NewHandler(userStore models.UserStoreInterface) *Handler {
 	return &Handler{userStore: userStore}
 }
 

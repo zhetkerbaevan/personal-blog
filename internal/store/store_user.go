@@ -42,9 +42,28 @@ func (s *UserStore) GetUserByEmail(email string) (*models.User, error) {
 		return nil, fmt.Errorf("USER NOT FOUND")
 	}
 	return user, nil
-
 }
 
+func (s *UserStore) GetUserByID(userId int) (*models.User, error) {
+	rows, err := s.db.Query("SELECT * FROM users WHERE id = $1", userId)
+	if err != nil {
+		return nil, err
+	}
+
+	user := new(models.User)
+	for rows.Next() {
+		user, err = scanIntoUser(rows)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	//check if user exists
+	if user.Id == 0 {
+		return nil, fmt.Errorf("USER NOT FOUND")
+	}
+	return user, nil
+}
 func scanIntoUser(rows *sql.Rows) (*models.User, error) {
 	user := new(models.User)
 	err := rows.Scan(
